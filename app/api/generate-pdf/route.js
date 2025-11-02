@@ -110,6 +110,17 @@ export async function POST(req) {
       p {
         text-align: justify;
       }
+      /* Center-align contact info */
+      div[align="center"],
+      div[style*="text-align: center"] {
+        text-align: center !important;
+        margin: 0 0 8px 0 !important;
+        padding: 0 !important;
+      }
+      div[align="center"] p,
+      div[style*="text-align: center"] p {
+        text-align: center !important;
+      }
       /* Right-align date ranges */
       div[align="right"],
       div[style*="text-align: right"] {
