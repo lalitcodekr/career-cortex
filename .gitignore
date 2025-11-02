@@ -40,9 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Prisma generated files (will be generated on Vercel)
-/lib/generated/prisma
-lib/generated/prisma
+# Prisma generated files (will be generated on Vercel via postinstall)
 *.dylib.node
 *.so
 *.dll
