@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
+// Force Node.js runtime (required for Puppeteer)
+export const runtime = "nodejs";
+
 // Local Chrome path for development (macOS)
 const CHROME_PATH =
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -42,7 +45,7 @@ export async function POST(req) {
       };
     } else {
       // Use @sparticuz/chromium for Vercel/serverless environments (default for all non-local-mac)
-      chromium.setGraphicsMode(false); // Disable GPU for serverless
+      chromium.setGraphicsMode = false; // Disable GPU for serverless
       const executablePath = await chromium.executablePath();
       
       launchOptions = {
