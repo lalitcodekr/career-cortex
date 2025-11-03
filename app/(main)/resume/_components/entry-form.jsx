@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, parse } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -37,6 +39,16 @@ const formatDisplayDate = (dateString) => {
 export default function EntryForm({ type, entries, onChange }) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const startDateInputRef = useRef(null);
+  const endDateInputRef = useRef(null);
+  const [isStartPickerOpen, setIsStartPickerOpen] = useState(false);
+  const [isEndPickerOpen, setIsEndPickerOpen] = useState(false);
+  const [startPickerMonth, setStartPickerMonth] = useState(String(new Date().getMonth() + 1).padStart(2, "0"));
+  const [startPickerYear, setStartPickerYear] = useState(String(new Date().getFullYear()));
+  const [endPickerMonth, setEndPickerMonth] = useState(String(new Date().getMonth() + 1).padStart(2, "0"));
+  const [endPickerYear, setEndPickerYear] = useState(String(new Date().getFullYear()));
+
+  const isSafari = typeof navigator !== "undefined" && /safari/i.test(navigator.userAgent) && !/chrome|crios|android|edg/i.test(navigator.userAgent);
 
   const {
     register,
@@ -91,7 +103,7 @@ export default function EntryForm({ type, entries, onChange }) {
         const parsedStartDate = parse(entry.startDate, "MMM yyyy", new Date());
         if (!isNaN(parsedStartDate.getTime())) {
           const year = parsedStartDate.getFullYear();
-          const month = String(parsedStartDate.getMonth() + 1).padStart(2, '0');
+          const month = String(parsedStartDate.getMonth() + 1).padStart(2, "0");
           setValue("startDate", `${year}-${month}`);
         }
       }
@@ -99,7 +111,7 @@ export default function EntryForm({ type, entries, onChange }) {
         const parsedEndDate = parse(entry.endDate, "MMM yyyy", new Date());
         if (!isNaN(parsedEndDate.getTime())) {
           const year = parsedEndDate.getFullYear();
-          const month = String(parsedEndDate.getMonth() + 1).padStart(2, '0');
+          const month = String(parsedEndDate.getMonth() + 1).padStart(2, "0");
           setValue("endDate", `${year}-${month}`);
         }
       }
@@ -148,7 +160,7 @@ export default function EntryForm({ type, entries, onChange }) {
     const description = watch("description");
     const title = watch("title");
     const organization = watch("organization");
-    
+
     if (!description) {
       toast.error("Please enter a description first");
       return;
@@ -209,7 +221,9 @@ export default function EntryForm({ type, entries, onChange }) {
       {isAdding && (
         <Card>
           <CardHeader>
-            <CardTitle>{editingIndex !== null ? `Edit ${type}` : `Add ${type}`}</CardTitle>
+            <CardTitle>
+              {editingIndex !== null ? `Edit ${type}` : `Add ${type}`}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -237,34 +251,190 @@ export default function EntryForm({ type, entries, onChange }) {
               </div>
             </div>
 
+            {isSafari && (
+              <>
+                <Dialog open={isStartPickerOpen} onOpenChange={setIsStartPickerOpen}>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Select start month</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex gap-3">
+                      <Select value={startPickerMonth} onValueChange={setStartPickerMonth}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Month" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((m) => (
+                            <SelectItem key={m} value={m}>{m}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={startPickerYear} onValueChange={setStartPickerYear}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Year" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 80 }, (_, idx) => String(new Date().getFullYear() + 10 - idx)).map((y) => (
+                            <SelectItem key={y} value={y}>{y}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => setIsStartPickerOpen(false)}>Cancel</Button>
+                      <Button onClick={() => {
+                        const value = `${startPickerYear}-${startPickerMonth}`;
+                        setValue("startDate", value, { shouldValidate: true });
+                        if (startDateInputRef.current) startDateInputRef.current.value = value;
+                        setIsStartPickerOpen(false);
+                      }}>Set</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog open={isEndPickerOpen} onOpenChange={setIsEndPickerOpen}>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Select end month</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex gap-3">
+                      <Select value={endPickerMonth} onValueChange={setEndPickerMonth}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Month" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((m) => (
+                            <SelectItem key={m} value={m}>{m}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={endPickerYear} onValueChange={setEndPickerYear}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Year" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 80 }, (_, idx) => String(new Date().getFullYear() + 10 - idx)).map((y) => (
+                            <SelectItem key={y} value={y}>{y}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => setIsEndPickerOpen(false)}>Cancel</Button>
+                      <Button disabled={current} onClick={() => {
+                        const value = `${endPickerYear}-${endPickerMonth}`;
+                        setValue("endDate", value, { shouldValidate: true });
+                        if (endDateInputRef.current) endDateInputRef.current.value = value;
+                        setIsEndPickerOpen(false);
+                      }}>Set</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Input
-                  placeholder="Start Date"
-                  type="month" // This is correct for a month/year picker
-                  {...register("startDate")}
-                  error={errors.startDate}
-                />
+                <div className="relative">
+                  <Input
+                    placeholder={isSafari ? "YYYY-MM" : "Start Date"}
+                    type={isSafari ? "text" : "month"} // month picker on modern browsers; text with custom picker on Safari
+                    {...(() => {
+                      const { ref, ...rest } = register("startDate");
+                      return {
+                        ...rest,
+                        ref: (e) => {
+                          startDateInputRef.current = e;
+                          if (typeof ref === "function") {
+                            ref(e);
+                          } else if (ref) {
+                            ref.current = e;
+                          }
+                        },
+                      };
+                    })()}
+                    error={errors.startDate}
+                    className="pr-10"
+                  />
+                  {isSafari && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const val = startDateInputRef.current?.value || "";
+                        if (/^\d{4}-\d{2}$/.test(val)) {
+                          const [y, m] = val.split("-");
+                          setStartPickerYear(y);
+                          setStartPickerMonth(m);
+                        }
+                        setIsStartPickerOpen(true);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                      tabIndex={-1}
+                      aria-label="Open calendar picker"
+                    >
+                      <Calendar className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
                 {errors.startDate && (
                   <p className="text-sm text-red-500">
                     {errors.startDate.message}
                   </p>
                 )}
+                <p className="text-sm text-muted-foreground">Start Date</p>
               </div>
 
               <div className="space-y-2">
-                <Input
-                  placeholder="End Date"
-                  type="month" // This is correct for a month/year picker
-                  {...register("endDate")}
-                  disabled={current}
-                  error={errors.endDate}
-                />
+                <div className="relative">
+                  <Input
+                    placeholder={isSafari ? "YYYY-MM" : "End Date"}
+                    type={isSafari ? "text" : "month"} // month picker on modern browsers; text with custom picker on Safari
+                    {...(() => {
+                      const { ref, ...rest } = register("endDate");
+                      return {
+                        ...rest,
+                        ref: (e) => {
+                          endDateInputRef.current = e;
+                          if (typeof ref === "function") {
+                            ref(e);
+                          } else if (ref) {
+                            ref.current = e;
+                          }
+                        },
+                      };
+                    })()}
+                    disabled={current}
+                    error={errors.endDate}
+                    className="pr-10"
+                  />
+                  {isSafari && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (current) return;
+                        const val = endDateInputRef.current?.value || "";
+                        if (/^\d{4}-\d{2}$/.test(val)) {
+                          const [y, m] = val.split("-");
+                          setEndPickerYear(y);
+                          setEndPickerMonth(m);
+                        }
+                        setIsEndPickerOpen(true);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      tabIndex={-1}
+                      aria-label="Open calendar picker"
+                      disabled={current}
+                    >
+                      <Calendar className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
                 {errors.endDate && (
                   <p className="text-sm text-red-500">
                     {errors.endDate.message}
                   </p>
                 )}
+                <p className="text-sm text-muted-foreground">End Date</p>
               </div>
             </div>
 
@@ -317,11 +487,7 @@ export default function EntryForm({ type, entries, onChange }) {
             </Button>
           </CardContent>
           <CardFooter className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-            >
+            <Button type="button" variant="outline" onClick={handleCancel}>
               Cancel
             </Button>
             <Button type="button" onClick={handleAdd}>
