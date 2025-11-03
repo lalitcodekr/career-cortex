@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎯 Career Cortex — Your AI Career Trainer
 
-## Getting Started
+[Visit Live →](https://careercortex.vercel.app)
 
-First, run the development server:
+Career Cortex is your **AI-powered college companion** that helps you stay placement-ready throughout your academic journey.  
+It provides **industry insights, personalized quizzes, AI-generated resumes, and cover letters**, all in one unified platform.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Built using **Next.js** and powered by **Gemini API**, it offers an intelligent, seamless experience for students to track progress, enhance skills, and prepare for the industry.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🚀 Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 🧠 **AI Career Trainer:** Personalized assistance for career and skill growth.  
+- 🧩 **Dynamic Quiz Generator:** AI-powered quizzes to assess and improve knowledge.  
+- 📄 **Resume & Cover Letter Generator:** Instantly create and download ATS-optimized documents.  
+- 📊 **Growth Tracker:** View and analyze your regular quiz performance and progress.  
+- ⚙️ **Smart Insights:** Uses your activity and quiz history to refine recommendations.  
+- ⚡ **Optimized Performance:** Fast, responsive, and reliable on all devices.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Framework:** Next.js  
+- **AI Engine:** Gemini API  
+- **UI:** Tailwind CSS, ShadCN/UI, Lucide Icons  
+- **Database & Auth:** Prisma, PostgreSQL, Clerk  
+- **Hosting:** Vercel  
+- **Utilities:** React Hook Form, Zod, Sonner, Inngest
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧠 Future Enhancements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- AI-based **career roadmap generator**  
+- Chat-driven **career guidance assistant**  
+- Advanced **analytics dashboard** with skill mapping  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🌐 Live Demo
+
+🔗 **Try it here:** [https://careercortex.vercel.app](https://careercortex.vercel.app)
+
+---
+
+### 💼 Made with ❤️ by P. Lalit Kumar  
+Empowering students to grow smarter, faster, and career-ready 🚀
