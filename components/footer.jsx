@@ -21,14 +21,11 @@ export default function Footer() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const [hasData, setHasData] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Check if user has data
   useEffect(() => {
     const checkUserData = async () => {
       if (!isLoaded || !user) {
-        setIsLoading(false);
         setHasData(false);
         return;
       }
@@ -41,11 +38,8 @@ export default function Footer() {
         } else {
           setHasData(false);
         }
-      } catch (error) {
-        console.error("Error checking user data:", error);
+      } catch {
         setHasData(false);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -55,9 +49,7 @@ export default function Footer() {
   const handleClearData = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch("/api/clear-data", {
-        method: "DELETE",
-      });
+      const response = await fetch("/api/clear-data", { method: "DELETE" });
 
       if (!response.ok) {
         const error = await response.json();
@@ -67,25 +59,31 @@ export default function Footer() {
       toast.success("All your data has been cleared successfully");
       router.push("/onboarding");
     } catch (error) {
-      console.error("Error clearing data:", error);
       toast.error(error.message || "Failed to clear data. Please try again.");
       setIsDeleting(false);
     }
   };
 
-  // Don't show button if user is not logged in or doesn't have data
+  // If user is not logged in or has no stored data
   if (!isLoaded || !user || !hasData) {
     return (
-      <footer className="bg-muted/50 py-12">
+      <footer className="bg-muted/50 py-12 relative">
         <div className="container mx-auto px-4 text-center text-gray-200">
           <p>Made with 💗 by Lalit</p>
         </div>
+
+        <a
+          href="mailto:lalit.kumar.pyda@gmail.com"
+          className="absolute bottom-4 right-4 text-xs text-gray-300 hover:underline"
+        >
+          Contact Me
+        </a>
       </footer>
     );
   }
 
   return (
-    <footer className="bg-muted/50 py-12">
+    <footer className="bg-muted/50 py-12 relative">
       <div className="container mx-auto px-4">
         <div className="flex flex-row items-center justify-center gap-8 text-gray-200 flex-wrap">
           <p className="text-center">Made with 💗 by Lalit</p>
@@ -100,6 +98,7 @@ export default function Footer() {
                 Clear My Data
               </Button>
             </AlertDialogTrigger>
+
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -108,6 +107,7 @@ export default function Footer() {
                   your data from the database and restart onboarding.
                 </AlertDialogDescription>
               </AlertDialogHeader>
+
               <AlertDialogFooter>
                 <AlertDialogCancel disabled={isDeleting}>
                   Cancel
@@ -124,6 +124,13 @@ export default function Footer() {
           </AlertDialog>
         </div>
       </div>
+
+      <a
+        href="mailto:lalit.kumar.pyda@gmail.com"
+        className="absolute bottom-4 right-4 text-xs text-gray-300 hover:underline"
+      >
+        Contact
+      </a>
     </footer>
   );
 }
