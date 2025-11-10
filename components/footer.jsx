@@ -73,7 +73,7 @@ export default function Footer() {
         </div>
 
         <a
-          href="mailto:lalit.kumar.pyda@gmail.com"
+          href="mailto:p.lalitkr2526@gmail.com"
           className="absolute bottom-4 right-4 text-xs text-gray-300 hover:underline"
         >
           Contact Me
@@ -126,7 +126,7 @@ export default function Footer() {
       </div>
 
       <a
-        href="mailto:lalit.kumar.pyda@gmail.com"
+        href="mailto:p.lalitkr2526@gmail.com"
         className="absolute bottom-4 right-4 text-xs text-gray-300 hover:underline"
       >
         Contact
